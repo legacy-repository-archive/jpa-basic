@@ -192,15 +192,106 @@ JPA의 대부분의 기능들은 이 `EntityManager`인스턴스가 수행한다
 ```
 
 엔티티 매니저 팩토리는 애플리케이션 종료 직전에 종료시키자.  
+  
+## 트랜잭션 관리   
+JPA를 사용하면 항상 트랜잭션 안에서 데이터를 변경해야 한다.       
+트랜잭션 없이 데이터를 변경하면 예외를 발생시키기도 한다.   
 
-## 트랜잭션 관리  
+```java
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            logic(em);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+
+        emf.close();
+    }
+```
+트랜잭션을 시작하려면 `엔티티 매니저`에서 `트랜잭션 API`를 받아와야한다.   
+`트랜잭션 API`를 받아온후 `begin()`을 통해 실행 및 `commit()`을 통해 반영시킨다.   
+단, 에러가 발생할 경우 `rollback()`을 통해 이전 상태로 돌린다.   
+
+* begin() : 트랜잭션을 시작한다.  
+* commit() : 데이터베이스에 반영한다.  
+* rollback() : 이전 상태로 돌린다.  
+* flush() : 영속성 컨텍스트의 변경 내용을 DB 에 반영한다.   
+  
+**flush vs commit**
+* flush : session state 와 DB를 sync하는것
+* commit : flush + end of the unit of work
+* 필자 생각 :    
+    * flush : DB 반영, 단 트랜잭션에서 보류중인 작업    
+    * commit : 반영된 DB 내용을 지속시도록 한다.     
+* 이 [사이트](https://classmethod.dev/ko/questions/4201455)도 참고하면 좋다 :)    
+  
+보다 자세한 내용은 다음 챕터에 정리할 예정이지만     
+미리 맛보고 싶다면 [heejeong Kwon 님의 블로그를 통해 확인하자](https://gmlwjd9405.github.io/2019/08/07/what-is-flush.html)   
+  
+## 비즈니스 로직     
+> 업무에 필요한 데이터 처리를 수행하는 응용프로그램의 일부     
+> 데이터 입력, 수정, 조회 및 보고서 처리 등을 수행하는 루틴     
+> 좀더 엄밀히 말하면 보이는 것의 그 뒤에서 일어나는 각종 처리를 의미한다.    
+
+JPA에서의 비즈니스 로직은 `EntityManager`를 통해 데이터를 처리하는 과정을 말한다.   
+이 과정에서 CRUD 작업을 할 수 있는데 아래에서 맛 보기로 설명해보겠다.   
 
 
-## 비즈니스 로직 
+### 등록 
+```java
+em.persist(object);
+```
+엔티티 매니저의 `persist()` 메서드에 저장할 엔티티(인스턴스)를 넘겨주면 된다.     
+JPA에서는 엔티티 매핑 정보를 분석해 SQL을 만들어서 DB에 전달한다.   
+
+### 조회
+```java
+Something something = em.find(Something.class, id);
+```
+엔티티 매니저의 `find()` 메서드에 아래와 같은 인자값을 넣어주면 된다.   
+    
+1. 클래스 정보 `.class`    
+2. `@Id`로 매핑된 컬럼에서 조회할 수 있는 값
+    * 예를 들어 1번 데이터일 경우, `1L`      
+
+JPA에서는 인자 값을 매핑하여 SQL을 만든 후 DB에 전달하고     
+이후 조회 된 데이터를 엔티티의 형식에 알맞게 반환한다.       
+   
+### 수정
+```java
+Something something = em.find(Something.class, id);
+something.setName("ssomething");
+```
+엔티티 매니저를 사용하지 않고,       
+엔티티 매니저로 찾은 엔티티의 값을 변경하면 된다.         
+   
+다음 챕터에서 기술하겠지만     
+엔티티 매니저의 영속성 컨텍스트에 저장된 객체들은      
+값의 변동이 일어나면 이에 알맞게 수접 SQL을 만들어 보내기 때문이다.  
+    
+### 삭제
+```java
+em.remove(object);   
+```  
+엔티티 매니저의 `remove()` 메서드에 삭제할 엔티티(인스턴스)를 넘겨주면 된다.        
+JPA에서는 엔티티 매핑 정보를 분석해 SQL을 만들어서 DB에 전달한다.     
+  
+# JPQL  
+JPA를 사용하면 **엔티티 객체를 중심으로 개발**하고 **데이터베이스에 대한 처리는 JPA 맡긴다.**       
+하지만, 검색에 있어 이 같은 원칙을 지키기가 힘들다        
+쉬운 예시를 들면, 검색을 하기 위해 모든 데이터를 애플리케이션에 로드하고 검색하는 로직을 만들어야한다.     
+이는 매우 비효율적인 작업이다.                 
+그렇기에 JPA는 **JPQL**이라는 쿼리 언어로 `SQL`을 실행하도록 지원해준다.     
+    
+JPA는 SQL을 추상화한 JPQL이란느 객체지향 쿼리 언어를 제공한다.       
+JPQL은 SQL과 거의 유사해서 `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `HAVING`, `JOIN`등을 사용할 수 있다.     
    
 
 
-  
 
  
 
