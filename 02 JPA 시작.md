@@ -30,6 +30,59 @@ JPA는 `persistence.xml`을 사용해서 필요한 설정 정보를 관리한다
     </persistence-unit>
 </persistence>
 ```
+위 `xml` 에 대해서 분석을 진행해보겠다.   
    
+**필수 속성**   
+* `javax.persistence.jdbc.driver` : JDBC 드라이버 
+* `javax.persistence.jdbc.user` : 데이터베이스 접속 ID 
+* `javax.persistence.jdbc.password` : 데이터베이스 접속 PASSWORD
+* `javax.persistence.jdbc.url` : 데이터베이스 접속 URL  
+* `hibernate.dialect` : 데이터베이스 방언 설정 
+      
+**선택 속성**     
+* `hibernate.show_sql` : hibernate가 실행한 SQL을 출력한다.    
+* `hibernate.format_sql` : hibernate가 실행한 SQL을 보기 좋게 정렬한다.      
+* `hibernate.use_sql_comments` : hibernate가 실행한 SQL을 출력할 때 주석도 같이 출력한다.      
+* `hibernate.id.new_generator_mappings` :JPA 표준에 맞춘 새로운 키 생성 전략을 사용한다. (이후 정리)    
+
+# 데이터베이스 방언 
+> 해당 부분은 개념적으로만 이해하기 위해서 정리합니다.  
+  
+JPA는 데이터베이스에 종속적이지 않다.     
+하지만, 각 데이터베이스마다 제공되는 SQL 문법이 다르다는 문제가 있다.      
+물론, 표준 SQL도 존재하지만 데이터베이스마다 다른 고유한 SQL도 있다.  
+ 
+**대표적인 예**  
+* **데이터 타입 :**    
+    * MYSQL : VARCHAR  
+    * ORACLE : VARCHAR2   
+* **다른 함수명 :**    
+    * MYSQL : SUBSTRING   
+    * ORACLE : SUBSTR     
+* **페이징 처리 :**   
+    * MYSQL : LIMIT
+    * ORACLE : ROWNUM 
+   
+JPA 또한 해당 데이터베이스의 방언에 맞게끔 SQL 변환 작업을 거쳐야한다.        
+따라서, 특정 데이터베이스에 대한 방언 정보를 아래와 같이 넘겨주자     
+  
+```xml
+<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+```  
+     
+**hibernate.dialect 속성**
+* **MySQL :** org.hibernate.dialect.MySQL5InnoDBDialect
+* **Oracle :** org.hibernate.dialect.Oracle10gDialect
+* **H2 :** org.hibernate.dialect.H2Dialect    
+* 이 외에도 40가지 이상의 데이터베이스 방언 지원한다.    
+
+보자 자세한 내용은 [공식 레퍼런스](https://docs.jboss.org/hibernate/orm/3.5/javadocs/org/hibernate/dialect/package-summary.html)를 통해서 확인하자   
+
+
+
+
+
+  
+
  
 
