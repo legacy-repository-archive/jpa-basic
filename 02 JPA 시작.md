@@ -1,4 +1,3 @@
-# JPA 시작
 > 해당 파트는 실제 실습 환경을 구성하면서 진행하기에   
 > 중요하다고 생각하는 부분만 정리하겠습니다.  
     
@@ -139,8 +138,8 @@ public class JpaMain {
 * 비즈니스 로직 관리   
 
   
-## 엔티티 매니저 설정   
-### 엔티티 매니저 팩토리 
+# 엔티티 매니저 설정   
+## 엔티티 매니저 팩토리 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2"
@@ -162,7 +161,7 @@ JPA를 동작시키기 위한 기반 객체 생성 및, `DB Connection Pool` 도
 **따라서, `EntityManagerFactory`는 애플리케이션 전체에서 딱 한번만 생성하고 공유하면서 사용하자**     
 참고로 공유하면서 사용할 수 있다는 것은 `thread-safe`하게 설계 되었다는 뜻이기도 하다.   
 
-### 엔티티 매니저
+## 엔티티 매니저
 ```java
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
         EntityManager em = emf.createEntityManager();
@@ -193,7 +192,7 @@ JPA의 대부분의 기능들은 이 `EntityManager`인스턴스가 수행한다
 
 엔티티 매니저 팩토리는 애플리케이션 종료 직전에 종료시키자.  
   
-## 트랜잭션 관리   
+# 트랜잭션 관리   
 JPA를 사용하면 항상 트랜잭션 안에서 데이터를 변경해야 한다.       
 트랜잭션 없이 데이터를 변경하면 예외를 발생시키기도 한다.   
 
@@ -232,7 +231,7 @@ JPA를 사용하면 항상 트랜잭션 안에서 데이터를 변경해야 한�
 보다 자세한 내용은 다음 챕터에 정리할 예정이지만     
 미리 맛보고 싶다면 [heejeong Kwon 님의 블로그를 통해 확인하자](https://gmlwjd9405.github.io/2019/08/07/what-is-flush.html)   
   
-## 비즈니스 로직     
+# 비즈니스 로직     
 > 업무에 필요한 데이터 처리를 수행하는 응용프로그램의 일부     
 > 데이터 입력, 수정, 조회 및 보고서 처리 등을 수행하는 루틴     
 > 좀더 엄밀히 말하면 보이는 것의 그 뒤에서 일어나는 각종 처리를 의미한다.    
@@ -241,14 +240,14 @@ JPA에서의 비즈니스 로직은 `EntityManager`를 통해 데이터를 처�
 이 과정에서 CRUD 작업을 할 수 있는데 아래에서 맛 보기로 설명해보겠다.   
 
 
-### 등록 
+## 등록 
 ```java
 em.persist(object);
 ```
 엔티티 매니저의 `persist()` 메서드에 저장할 엔티티(인스턴스)를 넘겨주면 된다.     
 JPA에서는 엔티티 매핑 정보를 분석해 SQL을 만들어서 DB에 전달한다.   
 
-### 조회
+## 조회
 ```java
 Something something = em.find(Something.class, id);
 ```
@@ -261,7 +260,7 @@ Something something = em.find(Something.class, id);
 JPA에서는 인자 값을 매핑하여 SQL을 만든 후 DB에 전달하고     
 이후 조회 된 데이터를 엔티티의 형식에 알맞게 반환한다.       
    
-### 수정
+## 수정
 ```java
 Something something = em.find(Something.class, id);
 something.setName("ssomething");
@@ -273,7 +272,7 @@ something.setName("ssomething");
 엔티티 매니저의 영속성 컨텍스트에 저장된 객체들은      
 값의 변동이 일어나면 이에 알맞게 수접 SQL을 만들어 보내기 때문이다.  
     
-### 삭제
+## 삭제
 ```java
 em.remove(object);   
 ```  
