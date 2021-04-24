@@ -283,15 +283,35 @@ JPA에서는 엔티티 매핑 정보를 분석해 SQL을 만들어서 DB에 전�
 # JPQL  
 JPA를 사용하면 **엔티티 객체를 중심으로 개발**하고 **데이터베이스에 대한 처리는 JPA 맡긴다.**       
 하지만, 검색에 있어 이 같은 원칙을 지키기가 힘들다        
-쉬운 예시를 들면, 검색을 하기 위해 모든 데이터를 애플리케이션에 로드하고 검색하는 로직을 만들어야한다.     
+쉬운 예를 들면, 검색을 하기 위해 모든 데이터를 애플리케이션에 로드하고 검색하는 로직을 만들어야한다.     
 이는 매우 비효율적인 작업이다.                 
 그렇기에 JPA는 **JPQL**이라는 쿼리 언어로 `SQL`을 실행하도록 지원해준다.     
+  
+```java  
+em.createQuery("JPQL쿼리", JPQL에 사용되는 클래스타입);
+```
+엔티티 매니저의 `createQuery()` 를 이용하여 JPQL을 사용할 수 있다.     
+보다 자세한 내용은 후반 챕터에 기술하겠다.     
+     
+```java
+        List<Member> result = em.createQuery("select m from Member as m", Member.class)
+            .setFirstResult(5)
+            .setMaxResults(0)
+            .getResultList();
+```
+
+JPA는 SQL을 추상화한 `JPQL`이라는 객체지향 쿼리 언어를 제공한다.       
+`JPQL`은 SQL과 거의 유사해서 `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `HAVING`, `JOIN`등을 사용할 수 있다.     
+
+**JPQL VS SQL**   
+* **JPQL :**     
+  **엔티티 객체를 대상**으로 쿼리한다.   
+  즉, 쿼리와 필드를 대상으로 쿼리한다.   
+* **SQL :**  
+  데이터베이스 **테이블을 대상**으로 쿼리한다.   
     
-JPA는 SQL을 추상화한 JPQL이란느 객체지향 쿼리 언어를 제공한다.       
-JPQL은 SQL과 거의 유사해서 `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `HAVING`, `JOIN`등을 사용할 수 있다.     
-   
+이러한 차이점 때문인지, JPQL 쿼리를 보면    
+`select m from Member as m` SQL과 다르게 실제 엔티티가 `from`의 대상이 된다.     
 
 
-
- 
 
