@@ -95,6 +95,109 @@ JPA 또한 해당 데이터베이스의 방언에 맞게끔 SQL 변환 작업을
 > 해당 부분은 일종의 에피타이저입니다.      
 > 즉, 간단하게 내용에 대해 맛 보기 위해서 정리합니다.       
     
+```java
+package hellojpa;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import java.util.List;
+
+public class JpaMain {
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction tx = em.getTransaction();
+        
+        try {
+            tx.begin();
+            logic(em);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+
+        emf.close();
+    }
+    
+    private static void logic(EntityManager em) {
+        List<Member> result = em.createQuery("select m from Member as m", Member.class)
+            .setFirstResult(5)
+            .setMaxResults(0)
+            .getResultList();
+    }
+}
+```
+코드는 크게 3부분으로 나뉘어 있다.   
+
+* 엔티티 매니저 설정 
+* 트랜잭션 관리 
+* 비즈니스 로직 관리   
+
+  
+## 엔티티 매니저 설정   
+### 엔티티 매니저 팩토리 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    <persistence-unit name="hello"> <!--여기 이름과-->
+```
+```java
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello"); // 여기 이름이 동일해야한다.  
+```
+ 
+JPA를 시작하려면 우선,     
+`persistence.xml`의 설정 정보를 사용해서 `EntityManagerFactory`를 생성해야 한다.           
+이때, `persistence.xml`의 영속성 유닛의 이름과 동일한 인자값을 넘겨줘야한다.       
+ 
+`EntityManagerFactory`는 `persistence.xml`를 통해서     
+JPA를 동작시키기 위한 기반 객체 생성 및, `DB Connection Pool` 도 생성한다.      
+즉, 비용이 아주 큰 작업을 하는 셈이다.   
+**따라서, `EntityManagerFactory`는 애플리케이션 전체에서 딱 한번만 생성하고 공유하면서 사용하자**     
+참고로 공유하면서 사용할 수 있다는 것은 `thread-safe`하게 설계 되었다는 뜻이기도 하다.   
+
+### 엔티티 매니저
+```java
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManager em = emf.createEntityManager();
+```
+`EntityManagerFactory` 인스턴스를 통해 `EntityManager`인스턴스를 생성한다.   
+JPA의 대부분의 기능들은 이 `EntityManager`인스턴스가 수행한다. (CRUD)   
+    
+`EntityManagerFactory` 인스턴스는 내부에     
+`데이터 소스(커넥션)`을 유지하면서 데이터베이스와 통신한다.     
+따라서 `EntityManagerFactory`를 가상의 DB로 생각할 수 있다.    
+참고로, **`EntityManagerFactory`는 스레드간에 공유하거나 재사용하면 안된다.** 
+(데이터베이스 커넥션과 밀접한 관계가 있기 때문이다.)    
+          
+추가적으로, **영속성 컨텍스트가 이 `EntityManagerFactory` 인스턴스에 존재한다.**          
+(인스턴스에 존재한다는 뜻은 각 객체마다 존재하고 같은 라이프사이클을 가진다는 뜻이겠죠? ㅎㅎ)       
+      
+**종료**   
+```java
+            em.close();
+``` 
+사용이 끝난 엔티티 매니저는 종료해야한다.     
+앞서 말했듯이, 엔티티 매니저는 **데이터베이스 커넥션**을 소유하고 있기에     
+종료하지 않을 경우 해당 커넥션을 낭비하고, 성능 저하의 큰 원인이 될 것이다.   
+
+```java
+        emf.close();
+```
+
+엔티티 매니저 팩토리는 애플리케이션 종료 직전에 종료시키자.  
+
+## 트랜잭션 관리  
+
+
+## 비즈니스 로직 
+   
 
 
   
