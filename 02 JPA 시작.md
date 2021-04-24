@@ -71,9 +71,9 @@ JPA 또한 해당 데이터베이스의 방언에 맞게끔 SQL 변환 작업을
 ```  
      
 **hibernate.dialect 속성**
-* **MySQL :** org.hibernate.dialect.MySQL5InnoDBDialect
-* **Oracle :** org.hibernate.dialect.Oracle10gDialect
-* **H2 :** org.hibernate.dialect.H2Dialect    
+* **MySQL :** `org.hibernate.dialect.MySQL5InnoDBDialect`
+* **Oracle :** `org.hibernate.dialect.Oracle10gDialect`
+* **H2 :** `org.hibernate.dialect.H2Dialect`    
 * 이 외에도 40가지 이상의 데이터베이스 방언 지원한다.    
 
 보자 자세한 내용은 [공식 레퍼런스](https://docs.jboss.org/hibernate/orm/3.5/javadocs/org/hibernate/dialect/package-summary.html)를 통해서 확인하자   
