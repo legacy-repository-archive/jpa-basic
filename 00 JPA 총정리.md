@@ -85,11 +85,19 @@ em.persist(member);
 **엔티티 4가지 상태**
 
 * **비영속 :** 엔티티가 영속성 컨텍스트와 전혀 관계가 없는 상태  
-  `Entity entity = new Entitiy();`
+  ```java
+  Entity entity = new Entitiy();
+  ```
 * **영속 :** 엔티티가 영속성 컨텍스트에 의해 관리되는 엔티티 상태  
-  `em.persist(entity);`
+  ```java
+  em.persist(entity);
+  ```
 * **준영속 :** 엔티티가 영속성 컨텍스트에 저장되었다가 분리된 상태
-  `em.detach(entity);`
+  ```java
+  em.detach(entity);
+  ```
 * **삭제 :** 엔티티가 영속성 컨텍스트에서 삭제된 상태
-  `em.remove(entity);`
+  ```java
+  em.remove(entity);
+  ```
 
