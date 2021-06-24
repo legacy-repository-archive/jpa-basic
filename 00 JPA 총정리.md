@@ -91,20 +91,20 @@ em.remove(entity)
 * 변경 감지
 * 지연 로딩
 
-# CRUD
-## Create
+## CRUD
+### Create
 ```java
 em.persist(object);
 ```
 `영속성 컨텍스트`에 저장    
       
-## Read
+### Read
 ```java
 Something something = em.find(Something.class, id); // 반환 타입, ID와 
 ```
 `영속성 컨텍스트`에 조회를 하고 없으면 `DB`에서 조회      
       
-## Update   
+### Update   
 ```java
 Something something = em.find(Something.class, id);
 something.setName("ssomething");
@@ -113,7 +113,7 @@ something.setName("ssomething");
 하지만, 이 조차 `불변`을 지키지 않게 만드므로 `도메인`과 `엔티티`를 분리하여             
 `불변한 상태를 만들자`는 이야기도 나오고 있다.         
      
-## Delete   
+### Delete   
 ```java   
 em.remove(object);  
 ```
