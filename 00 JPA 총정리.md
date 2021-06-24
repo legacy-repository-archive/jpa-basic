@@ -113,15 +113,32 @@ em.persist(member);
 * 연관관계 주인 엔티티 : `@ManyToOne`, `@JoinColumn`
 * 연관관계 엔티티 : `@OneToMany`, `mappedBy=`
 
-## 연관 관계의 주인   
-**Member**
+## 연관 관계의 주인     
+**주인 객체 Member**      
 ```java
-@ManyToOne  
-@JoinColumn(name="TEAM_ID")     
-private Team team;  
+public class Member {
+    ... // 생략 
+
+    @ManyToOne(fetch=FetchType.LAZY)    
+    @JoinColumn(name="TEAM_ID")        
+    private Team team;    
+    
+    ... // 생략  
+}
 ```
-**Team**
+**FK_ID 이름 설정 기준 :** `필드명`+ `_` + `참조하는 테이블의 기본키 컬럼명`   
+     
+**관계 객체 - Team**
 ```java
-@OneToMany(mappedBy = "team")    
-private List<Member> members;     
+public class Team {
+    ... // 생략 
+     
+    @OneToMany(mappedBy = "team")    
+    private List<Member> members;     
+    
+    ... // 생략   
+}
 ```
+**mappedBy 설정 기준 :** 매핑된 필드의 변수 이름   
+
+
