@@ -1,4 +1,5 @@
 # 엔티티 매니저 설정   
+**기본 설정**  
 ```java
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
         EntityManager em = emf.createEntityManager();
