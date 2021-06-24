@@ -115,7 +115,7 @@ em.persist(member);
 
 ## 연관 관계의 주인   
 **Member**
-```
+```java
 @ManyToOne  
 @JoinColumn(name="TEAM_ID")     
 private Team team;  
