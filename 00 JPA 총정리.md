@@ -104,4 +104,5 @@ em.persist(member);
 * 객체와 테이블 : `@Entity`, `@Table`
 * 기본 키 매핑 : `@Id`
 * 필드와 컬럼 매핑 : `@Column`
-* 연관관계 매핑 : `@ManyToOne`, `@JoinColumn`
+* 연관관계 주인 엔티티 : `@ManyToOne`, `@JoinColumn`
+* 연관관계 엔티티 : `@OneToMany`, `mappedBy=`
