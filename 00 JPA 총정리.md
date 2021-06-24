@@ -114,5 +114,14 @@ em.persist(member);
 * 연관관계 엔티티 : `@OneToMany`, `mappedBy=`
 
 ## 연관 관계의 주인   
-
-
+**Member**
+```
+@ManyToOne  
+@JoinColumn(name="TEAM_ID")     
+private Team team;  
+```
+**Team**
+```java
+@OneToMany(mappedBy = "team")    
+private List<Member> members;     
+```
