@@ -99,10 +99,20 @@ em.persist(member);
   ```java
   em.remove(entity);
   ```
+* **병합 :** 준영속 상태의 엔티티를 다시 영속 상태로 변경한다.   
+  ```java
+  Member member = em.find(Member.class, 200L);
+  em.detach(member);   
+  Member mergeMember = em.merge(member);   
+  ```
 
 # 엔티티 매핑 
-* 객체와 테이블 : `@Entity`, `@Table`
-* 기본 키 매핑 : `@Id`
+* 객체와 테이블 : `@Entity`, `@Table`   
+* 기본 키 매핑 : `@Id`, `@GeneratedValue(strategy = GenerationType.AUTO)`
 * 필드와 컬럼 매핑 : `@Column`
 * 연관관계 주인 엔티티 : `@ManyToOne`, `@JoinColumn`
 * 연관관계 엔티티 : `@OneToMany`, `mappedBy=`
+
+## 연관 관계의 주인   
+
+
