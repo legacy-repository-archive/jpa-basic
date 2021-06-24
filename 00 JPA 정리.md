@@ -1,23 +1,31 @@
 # 엔티티 매니저 설정   
 **기본 설정**  
 ```java
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        
-        try {
-            tx.begin();
-              
-            // 로직  
-              
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-        } finally {
-            em.close();
-        }
-        emf.close();
-    }
+public class JpaBasicApplication {
+
+	public static void main(String[] args) {
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("hello");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		try {
+			entityTransaction.begin();
+			businessLogic(entityManager);
+			entityTransaction.commit();
+		} catch (Exception e) {
+			entityTransaction.rollback();
+		} finally {
+			entityManager.close();
+		}
+		entityManagerFactory.close();
+	}
+
+	private static void businessLogic(EntityManager entityManager) {
+		Order order = new Order();
+		entityManager.persist(order);
+	}
+
+}
 ```
 **EntityTransaction tx**       
 * **begin() :** 트랜잭션을 시작한다.   
