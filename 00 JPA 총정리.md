@@ -80,7 +80,6 @@ em.persist(member);
 * 변경 감지
 * 지연 로딩
 
-
 ## 엔티티의 생명주기
 **엔티티 4가지 상태**
 
@@ -101,3 +100,8 @@ em.persist(member);
   em.remove(entity);
   ```
 
+# 엔티티 매핑 
+* 객체와 테이블 : `@Entity`, `@Table`
+* 기본 키 매핑 : `@Id`
+* 필드와 컬럼 매핑 : `@Column`
+* 연관관계 매핑 : `@ManyToOne`, `@JoinColumn`
