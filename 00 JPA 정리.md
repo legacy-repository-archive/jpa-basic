@@ -56,8 +56,9 @@ public class JpaBasicApplication {
   Something something = em.find(Something.class, id);
   something.setName("ssomething");
   ```     
-  최근에는, `불변`을 지키지 못한다는 의견이 있어 
-  `도메인`과 `엔티티`를 분리하여 `불변한 상태를 만들자`는 이야기도 나오고 있다.             
+  최근에는, `더티 체크`가 결국 `불변`을 지키지 못한다는 의견이 있어     
+  `도메인`과 `엔티티`를 분리하여 `불변한 상태를 만들자`는 이야기도 나오고 있다.      
+  즉, `엔티티`를 불변하도록 만들고 이에 따라 `도메인도 불변`하도록 만드는 것이다.          
 * **Delete :** `영속성 컨텍스트`에서 제거 및 `DB`에서도 제거      
   ```java
   em.remove(object);
